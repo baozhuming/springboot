@@ -49,7 +49,7 @@
         
         function getJson() {
             $.ajax({
-                url:"/th/jsonaaa",
+                url:'[[@{/jsonaaa}]]',
                 dataType:"json",
                 success:function(result){
                     console.log(result);

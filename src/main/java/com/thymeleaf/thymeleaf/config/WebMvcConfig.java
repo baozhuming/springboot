@@ -9,18 +9,29 @@ import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.*;
+import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
+
 @Component
 @Configuration
 @EnableAutoConfiguration(exclude = MultipartAutoConfiguration.class)
+@EnableAsync  //服务器推送消息方式2：跨浏览器的 --3
+@EnableScheduling  //服务器推送消息方式2：跨浏览器的  --4
+@EnableWebSocketMessageBroker //
 public class WebMvcConfig implements WebMvcConfigurer {//一般不继承WebMvcConfigurationSupport类，这个类有个条件标签，会导致其他配置失效
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/toUpload").setViewName("/upload");
+        registry.addViewController("/toLogin").setViewName("/login");
+        registry.addViewController("/toSse").setViewName("/sse");
+        registry.addViewController("/toAsync").setViewName("/async/async");
+        registry.addViewController("/ws").setViewName("/websocket/ws");
     }
 
     @Override
@@ -36,7 +47,7 @@ public class WebMvcConfig implements WebMvcConfigurer {//一般不继承WebMvcCo
     public void addInterceptors(InterceptorRegistry registry) {
         //addPathPatterns:添加拦截规则
         //excludePathPatterns:排除拦截规则
-        registry.addInterceptor(getInterceptorConf()).addPathPatterns("/**").excludePathPatterns("/login","/","/**.ico");
+        registry.addInterceptor(getInterceptorConf()).addPathPatterns("/**");
     }
 
     /**
@@ -61,6 +72,7 @@ public class WebMvcConfig implements WebMvcConfigurer {//一般不继承WebMvcCo
                          .maxAge(3600) // 最大过期时间，默认为-1
                          .allowedHeaders("*");
     }
+
     @Bean
     public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(){
         return new WebServerFactoryCustomizer<ConfigurableWebServerFactory>() {

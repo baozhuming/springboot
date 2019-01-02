@@ -14,6 +14,7 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.WebApplicationInitializer;
@@ -73,7 +74,7 @@ public class ThymeleafApplication extends SpringBootServletInitializer implement
         people.add(p4);
         people.add(p5);
         people.add(p6);
-        randomException();
+//        randomException();
         model.addAttribute("singlePerson",single);
         model.addAttribute("people",people);
         return "index";
